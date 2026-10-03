@@ -1,0 +1,159 @@
+.compare-page {
+    min-height: 80vh;
+}
+
+.compare-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 4rem auto;
+}
+
+.compare-header p {
+    color: #64748b;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.compare-search-bar {
+    display: flex;
+    border-radius: 50px;
+    padding: 0.5rem;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.compare-search-bar input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    color: #1e293b;
+    outline: none;
+}
+
+.compare-search-bar .search-btn {
+    background: linear-gradient(135deg, #4f46e5, #ec4899);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.compare-search-bar .search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
+
+.compare-results {
+    margin-top: 2rem;
+}
+
+.results-title {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #4a4a68;
+    margin-bottom: 3rem;
+}
+
+.results-title .highlight {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.result-card {
+    position: relative;
+    padding: 2.5rem 1.5rem 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+}
+
+.result-card.cheapest {
+    border: 2px solid #4f46e5;
+    background: linear-gradient(180deg, rgba(79, 70, 229, 0.05) 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+.cheapest-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.retailer-logo {
+    height: 40px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.retailer-logo img {
+    max-height: 100%;
+    max-width: 150px;
+    object-fit: contain;
+}
+
+.price-tag {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.stock-status {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.in-stock {
+    color: #10b981;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.out-of-stock {
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.shipping-info {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}

@@ -25,6 +25,7 @@ const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const compareRoutes = require('./routes/compareRoutes');
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -33,6 +34,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/compare', compareRoutes);
 
 // Global Error Handler Middleware
 app.use((err, req, res, next) => {

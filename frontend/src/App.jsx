@@ -12,6 +12,7 @@ import Payment from './pages/Payment';
 import PlaceOrder from './pages/PlaceOrder';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminRoute from './components/AdminRoute';
+import Compare from './pages/Compare';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/shipping" element={<Shipping />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/placeorder" element={<PlaceOrder />} />
+          <Route path="/compare" element={<Compare />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route 

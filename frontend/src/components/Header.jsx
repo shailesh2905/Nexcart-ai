@@ -30,6 +30,7 @@ const Header = () => {
         <nav className="nav-links">
           <Link to="/products">Products</Link>
           <Link to="/categories">Categories</Link>
+          <Link to="/compare" style={{ color: '#ec4899', fontWeight: '600' }}>Compare Prices</Link>
         </nav>
 
         <div className="nav-icons">
