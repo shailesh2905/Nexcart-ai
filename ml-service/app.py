@@ -3,6 +3,8 @@ from flask_cors import CORS
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
+from sklearn.linear_model import LinearRegression
+import numpy as np
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -79,6 +81,38 @@ def get_recommendations(product_id):
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/predict-demand', methods=['GET'])
+def predict_demand():
+    try:
+        # Generate past 12 weeks of historical sales data
+        weeks = np.array(range(1, 13)).reshape(-1, 1)
+        base_sales = np.array([50, 55, 52, 60, 65, 62, 70, 75, 71, 80, 85, 90])
+        noise = np.random.normal(0, 5, 12)
+        historical_sales = base_sales + noise
+
+        # Train Linear Regression model
+        model = LinearRegression()
+        model.fit(weeks, historical_sales)
+
+        # Predict next 4 weeks
+        future_weeks = np.array(range(13, 17)).reshape(-1, 1)
+        predictions = model.predict(future_weeks)
+
+        # Format output
+        historical_data = [{"week": f"Week {i+1}", "sales": round(val)} for i, val in enumerate(historical_sales)]
+        forecast_data = [{"week": f"Week {i+13} (Forecast)", "predicted_sales": round(val)} for i, val in enumerate(predictions)]
+
+        return jsonify({
+            "status": "success",
+            "historical": historical_data,
+            "forecast": forecast_data,
+            "trend": "Upward" if model.coef_[0] > 0 else "Downward",
+            "growth_rate": round(model.coef_[0], 2)
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

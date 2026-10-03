@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
         {/* We use a placeholder image if product doesn't have an image_url since we're using dummy data */}
         <div className="product-img-wrapper">
             <img 
-              src={product.image_url || `https://via.placeholder.com/400x400?text=${encodeURIComponent(product.name)}`} 
+              src={product.image_url || `https://placehold.co/400x400?text=${encodeURIComponent(product.name)}`} 
               alt={product.name} 
               className="product-img"
             />

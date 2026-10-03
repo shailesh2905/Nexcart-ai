@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { Trash2, Edit, Plus, Package, Users, DollarSign, TrendingUp } from 'lucide-react';
+import { Trash2, Edit, Plus, Package, Users, DollarSign, TrendingUp, BarChart2 } from 'lucide-react';
 import './Admin.css';
 
 const AdminDashboard = () => {
@@ -29,9 +29,27 @@ const AdminDashboard = () => {
         }
     };
 
+    // State for Analytics
+    const [analytics, setAnalytics] = useState(null);
+    const [analyticsLoading, setAnalyticsLoading] = useState(false);
+
+    const fetchAnalytics = async () => {
+        setAnalyticsLoading(true);
+        try {
+            const { data } = await axios.get('http://localhost:5001/api/predict-demand');
+            setAnalytics(data);
+            setAnalyticsLoading(false);
+        } catch (err) {
+            console.error(err);
+            setAnalyticsLoading(false);
+        }
+    };
+
     useEffect(() => {
         if (activeTab === 'products') {
             fetchAdminProducts();
+        } else if (activeTab === 'analytics') {
+            fetchAnalytics();
         }
     }, [activeTab]);
 
@@ -56,6 +74,9 @@ const AdminDashboard = () => {
                 <div className="admin-sidebar glass">
                     <button className={`admin-tab ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>
                         <TrendingUp size={18} /> Overview
+                    </button>
+                    <button className={`admin-tab ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>
+                        <BarChart2 size={18} /> Demand AI
                     </button>
                     <button className={`admin-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>
                         <Package size={18} /> Products
@@ -144,6 +165,47 @@ const AdminDashboard = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'analytics' && (
+                        <div>
+                            <h2 style={{ marginBottom: '1.5rem', color: '#1e293b' }}>AI Demand Forecasting</h2>
+                            <p style={{ color: '#64748b', marginBottom: '2rem' }}>
+                                Powered by our Python Machine Learning Service. We use historical sales data and Linear Regression to predict inventory demand for the next 4 weeks.
+                            </p>
+
+                            {analyticsLoading ? <Loader /> : analytics ? (
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                                    <div className="glass" style={{ padding: '1.5rem', borderRadius: '12px' }}>
+                                        <h3 style={{ marginBottom: '1rem', color: '#4f46e5' }}>Last 12 Weeks (Historical)</h3>
+                                        <ul style={{ listStyle: 'none', padding: 0 }}>
+                                            {analytics.historical.map((item, idx) => (
+                                                <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                                                    <span style={{ color: '#64748b' }}>{item.week}</span>
+                                                    <span style={{ fontWeight: 'bold' }}>{item.sales} orders</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                    <div className="glass" style={{ padding: '1.5rem', borderRadius: '12px', border: '2px solid #ec4899' }}>
+                                        <h3 style={{ marginBottom: '1rem', color: '#ec4899' }}>Next 4 Weeks (AI Forecast)</h3>
+                                        <div style={{ marginBottom: '1.5rem', background: 'rgba(236, 72, 153, 0.1)', padding: '1rem', borderRadius: '8px', color: '#be185d', fontWeight: 'bold' }}>
+                                            Trend: {analytics.trend} (Growth Rate: {analytics.growth_rate})
+                                        </div>
+                                        <ul style={{ listStyle: 'none', padding: 0 }}>
+                                            {analytics.forecast.map((item, idx) => (
+                                                <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+                                                    <span style={{ color: '#64748b', fontWeight: '600' }}>{item.week}</span>
+                                                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{item.predicted_sales} orders expected</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            ) : (
+                                <Message variant="danger">Failed to load AI Analytics from ML Service.</Message>
                             )}
                         </div>
                     )}

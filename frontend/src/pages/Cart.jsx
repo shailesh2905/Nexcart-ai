@@ -27,7 +27,7 @@ const Cart = () => {
                         {cartItems.map((item) => (
                             <div key={item.id} className="glass" style={{ display: 'flex', alignItems: 'center', padding: '1.5rem', borderRadius: '12px', gap: '1.5rem' }}>
                                 <img 
-                                    src={item.image_url || `https://via.placeholder.com/100x100?text=${encodeURIComponent(item.name)}`} 
+                                    src={item.image_url || `https://placehold.co/100x100?text=${encodeURIComponent(item.name)}`} 
                                     alt={item.name} 
                                     style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
                                 />

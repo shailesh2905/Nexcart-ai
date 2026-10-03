@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { CreditCard, CheckCircle, Lock } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import CheckoutSteps from '../components/CheckoutSteps';
@@ -17,6 +18,8 @@ const PlaceOrder = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [paymentProcessing, setPaymentProcessing] = useState(false);
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
 
     // Calculate Prices
     const itemsPrice = Number(cartTotalPrice);
@@ -32,6 +35,13 @@ const PlaceOrder = () => {
 
     const placeOrderHandler = async () => {
         try {
+            setPaymentProcessing(true);
+            
+            // Simulate Payment Gateway Delay
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            setPaymentSuccess(true);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
             setLoading(true);
             const config = {
                 headers: {
@@ -56,18 +66,45 @@ const PlaceOrder = () => {
 
             clearCart();
             setLoading(false);
-            // In a real app we'd redirect to the order details page: navigate(`/order/${data.id}`)
-            // For now, redirect to home with success state, or just show success alert and redirect to profile
-            alert('Order Placed Successfully!');
+            setPaymentProcessing(false);
+            setPaymentSuccess(false);
+            alert('Order Placed Successfully! Payment Processed via ' + paymentMethod);
             navigate('/');
         } catch (err) {
             setError(err.response && err.response.data.message ? err.response.data.message : err.message);
             setLoading(false);
+            setPaymentProcessing(false);
+            setPaymentSuccess(false);
         }
     };
 
     return (
-        <div className="container section-padding animate-fade-in">
+        <div className="container section-padding animate-fade-in" style={{ position: 'relative' }}>
+            {paymentProcessing && (
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, 
+                    background: 'rgba(255,255,255,0.9)', zIndex: 100,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                    backdropFilter: 'blur(5px)', borderRadius: '16px'
+                }}>
+                    {!paymentSuccess ? (
+                        <>
+                            <div className="loader" style={{ marginBottom: '1.5rem', width: '50px', height: '50px', borderTopColor: '#4f46e5' }}></div>
+                            <h2 style={{ color: '#1e293b' }}>Processing Payment...</h2>
+                            <p style={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                <Lock size={16} /> Securely contacting {paymentMethod} Gateway
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <CheckCircle size={64} color="#10b981" style={{ marginBottom: '1.5rem' }} />
+                            <h2 style={{ color: '#10b981' }}>Payment Successful!</h2>
+                            <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Finalizing your order...</p>
+                        </>
+                    )}
+                </div>
+            )}
+            
             <CheckoutSteps step1 step2 step3 step4 />
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem' }}>
@@ -97,7 +134,7 @@ const PlaceOrder = () => {
                                 {cartItems.map((item, index) => (
                                     <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0', borderBottom: index !== cartItems.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none' }}>
                                         <img 
-                                            src={item.image_url || `https://via.placeholder.com/50x50?text=${encodeURIComponent(item.name)}`} 
+                                            src={item.image_url || `https://placehold.co/50x50?text=${encodeURIComponent(item.name)}`} 
                                             alt={item.name} 
                                             style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover' }}
                                         />
@@ -139,11 +176,12 @@ const PlaceOrder = () => {
 
                         <button 
                             className="btn btn-primary btn-block" 
-                            disabled={cartItems.length === 0}
+                            disabled={cartItems.length === 0 || paymentProcessing}
                             onClick={placeOrderHandler}
-                            style={{ marginTop: '1rem' }}
+                            style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}
                         >
-                            {loading ? <Loader /> : 'Place Order'}
+                            <CreditCard size={20} />
+                            {paymentProcessing ? 'Processing...' : `Pay $${totalPrice}`}
                         </button>
                     </div>
                 </div>

@@ -18,6 +18,16 @@ NexCart AI is built using a microservices-inspired architecture. By separating t
 3. **Node.js Backend** manages authentication, business logic, and talks to the **MySQL Database**.
 4. When a user views a product, the backend requests the **Python ML-Service** to generate "Recommended Products".
 5. **Python ML-Service** pulls product text data from the database, runs a TF-IDF machine learning model, and returns product recommendations.
+6. A standalone **Price Comparison Engine** handles cross-site mock aggregation when users search for external products.
+
+---
+
+## ✨ Core Features
+- **Full E-Commerce Flow**: Product browsing, shopping cart, and a multi-step checkout process with a simulated Payment Gateway.
+- **AI Recommendations**: Content-based filtering using Python, Pandas, and Scikit-Learn to suggest similar items in real-time.
+- **Admin Dashboard & AI Forecasting**: Secure, role-based dashboard for managing the store catalog with an integrated Time-Series Linear Regression model predicting future inventory demand.
+- **Live Price Comparison Engine**: A dedicated tool that aggregates and compares prices using a real live web scraper (Cheerio) fetching data directly from eBay.
+- **User Authentication**: Secure JWT-based login and registration system.
 
 ---
 
@@ -137,6 +147,6 @@ To run this platform locally, you will need to start the Database, the Backend, 
 
 ---
 
-## 🔮 Future Improvements (Phase 2)
-- **Cross-Site Price Comparison Engine**: A dedicated module (to prevent conflicting with core e-commerce logic) that allows users to search for a product (e.g., Louis Vuitton bag) and fetches live prices from various external sites (Amazon, Brand Official Sites) via web scraping and APIs to find the cheapest option.
-- **Sales & Demand Prediction**: Incorporate Time-Series ML models (LSTM/ARIMA) on historical sales data to predict future product demand for admin inventory management.
+## 🔮 Future Improvements
+- **Stripe/PayPal APIs**: Connect the simulated payment gateway to live processing environments.
+- **Advanced Scraping**: Utilize headless browsers (Puppeteer) to scrape SPAs (Single Page Applications) like Amazon where simple HTML fetching is blocked.

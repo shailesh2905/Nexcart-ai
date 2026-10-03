@@ -78,7 +78,7 @@ const ProductDetails = () => {
                     {/* Image Gallery */}
                     <div className="glass" style={{ borderRadius: '16px', overflow: 'hidden', padding: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img 
-                            src={product.image_url || `https://via.placeholder.com/600x600?text=${encodeURIComponent(product.name)}`} 
+                            src={product.image_url || `https://placehold.co/600x600?text=${encodeURIComponent(product.name)}`} 
                             alt={product.name} 
                             style={{ width: '100%', maxWidth: '400px', objectFit: 'contain' }}
                         />
