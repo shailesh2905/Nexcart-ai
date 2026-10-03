@@ -134,3 +134,9 @@ To run this platform locally, you will need to start the Database, the Backend, 
 - **Scalability**: If the recommendation engine gets heavy traffic, you can deploy multiple instances of the Python ML-service independently of the Node backend.
 - **Maintainability**: Clear separation of concerns. UI developers work in `/frontend`, API developers in `/backend`, and Data Scientists in `/ml-service` without stepping on each other's toes.
 - **Enterprise-Ready**: Utilizing Docker, JWTs, and isolated microservices mimics how large-scale tech companies build applications today.
+
+---
+
+## 🔮 Future Improvements (Phase 2)
+- **Cross-Site Price Comparison Engine**: A dedicated module (to prevent conflicting with core e-commerce logic) that allows users to search for a product (e.g., Louis Vuitton bag) and fetches live prices from various external sites (Amazon, Brand Official Sites) via web scraping and APIs to find the cheapest option.
+- **Sales & Demand Prediction**: Incorporate Time-Series ML models (LSTM/ARIMA) on historical sales data to predict future product demand for admin inventory management.
