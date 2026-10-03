@@ -8,7 +8,7 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const checkoutHandler = () => {
-        navigate('/login?redirect=checkout');
+        navigate('/login?redirect=/shipping');
     };
 
     return (

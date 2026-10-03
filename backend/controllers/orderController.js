@@ -25,15 +25,18 @@ const createOrder = async (req, res) => {
 
         // 2. Insert Order Items
         for (const item of orderItems) {
+            const productId = item.id || item.product_id;
+            const quantity = item.qty || item.quantity;
+            
             await connection.query(
                 `INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)`,
-                [orderId, item.product_id, item.quantity, item.price]
+                [orderId, productId, quantity, item.price]
             );
             
             // 3. Reduce stock
             await connection.query(
                 `UPDATE products SET stock = stock - ? WHERE id = ?`,
-                [item.quantity, item.product_id]
+                [quantity, productId]
             );
         }
 
