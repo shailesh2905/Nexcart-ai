@@ -18,7 +18,7 @@ const getProducts = async (req, res) => {
         `;
         let countQueryStr = `SELECT COUNT(*) as count FROM products WHERE name LIKE ?`;
         let queryParams = [keyword];
-        
+
         if (category !== '%') {
             queryStr += ` AND c.slug = ?`;
             countQueryStr += ` AND category_id = (SELECT id FROM categories WHERE slug = ?)`;
@@ -26,7 +26,7 @@ const getProducts = async (req, res) => {
         }
 
         queryStr += ` LIMIT ? OFFSET ?`;
-        
+
         const [countResult] = await pool.query(countQueryStr, queryParams.length === 2 ? [keyword, category] : [keyword]);
         const count = countResult[0].count;
 
@@ -84,4 +84,45 @@ const createProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById, createProduct };
+// @desc    Update a product
+// @route   PUT /api/products/:id
+// @access  Private/Admin
+const updateProduct = async (req, res) => {
+    try {
+        const { name, slug, description, category_id, brand, price, stock, is_featured } = req.body;
+
+        const [result] = await pool.query(
+            `UPDATE products SET name=?, slug=?, description=?, category_id=?, brand=?, price=?, stock=?, is_featured=? WHERE id=?`,
+            [name, slug, description, category_id, brand, price, stock, is_featured || false, req.params.id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json({ message: 'Product updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// @desc    Delete a product
+// @route   DELETE /api/products/:id
+// @access  Private/Admin
+const deleteProduct = async (req, res) => {
+    try {
+        const [result] = await pool.query(`DELETE FROM products WHERE id = ?`, [req.params.id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json({ message: 'Product removed' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };
